@@ -5,212 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jack URL Shortener</title>
     <style>
-        /* ڕێکخستنی سەرەتایی و فۆنتی سیستەمی ئەپڵ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* پاشبنەمایەکی ستایلی iOS 17 */
-        body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #1d1d1f;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* کارتی سەرەکی بە ستایلی شووشەیی (Glassmorphism) */
-        .ios-card {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 30px;
-            padding: 40px 30px;
-            width: 90%;
-            max-width: 420px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        /* سەردێڕ */
-        h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #000;
-        }
-
-        p.subtitle {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 30px;
-        }
-
-        /* بۆکسی داخڵکردنی لینک */
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        input[type="url"] {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 18px;
-            outline: none;
-            color: #000;
-            transition: all 0.2s ease;
-            direction: ltr; /* لینک دەبێت لە چەپەوە بۆ ڕاست بێت */
-        }
-
-        input[type="url"]:focus {
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2);
-            border-color: #007AFF;
-        }
-
-        /* دوگمەی ئەپڵ */
-        button.ios-btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            color: #fff;
-            background-color: #007AFF; /* شینی ئەپڵ */
-            border: none;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-        }
-
-        button.ios-btn:active {
-            transform: scale(0.96);
-        }
-
-        button.ios-btn:hover {
-            background-color: #0062cc;
-        }
-
-        /* بەشی ئەنجام (سەرەتا شاراوەیە) */
-        .result-box {
-            margin-top: 25px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 20px;
-            display: none; /* تا کلیک نەکرێت دەرناکەوێت */
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .short-url {
-            font-size: 18px;
-            font-weight: 600;
-            color: #007AFF;
-            direction: ltr;
-            margin-bottom: 15px;
-            word-break: break-all;
-        }
-
-        button.copy-btn {
-            background-color: #f2f2f7;
-            color: #007AFF;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
-        }
-
-        button.copy-btn:active {
-            background-color: #e5e5ea;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+        body { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); background-size: 400% 400%; animation: gradientBG 15s ease infinite; display: flex; justify-content: center; align-items: center; height: 100vh; color: #1d1d1f; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .ios-card { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 30px; padding: 40px 30px; width: 90%; max-width: 420px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); text-align: center; }
+        h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: #000; }
+        p.subtitle { font-size: 15px; color: #555; margin-bottom: 25px; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        input { width: 100%; padding: 16px 20px; font-size: 15px; background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 18px; outline: none; color: #000; direction: ltr; margin-bottom: 10px;}
+        input:focus { background: #fff; box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2); border-color: #007AFF; }
+        button.ios-btn { width: 100%; padding: 16px; font-size: 17px; font-weight: 600; color: #fff; background-color: #007AFF; border: none; border-radius: 18px; cursor: pointer; transition: 0.2s; }
+        button.ios-btn:active { transform: scale(0.96); }
+        .result-box { margin-top: 25px; padding: 20px; background: #fff; border-radius: 20px; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .short-url { font-size: 17px; font-weight: 600; color: #007AFF; direction: ltr; margin-bottom: 15px; word-break: break-all; }
+        button.copy-btn { background-color: #f2f2f7; color: #007AFF; border: none; padding: 10px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; }
+        
+        #loadingScreen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 999; text-align: center; padding-top: 40vh; font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="ios-card">
+    <div id="loadingScreen">چاوەڕێ بکە، ئاڕاستە دەکرێیت... ⏳</div>
+
+    <div class="ios-card" id="mainCard">
         <h1>Jack.link</h1>
-        <p class="subtitle">لینکەکانت بە خێرایی و ئاسانی کورت بکەرەوە</p>
+        <p class="subtitle">لینکەکانت بە خێرایی و ناوی خۆتەوە کورت بکەرەوە</p>
 
         <div class="input-group">
-            <input type="url" id="longUrl" placeholder="https://example.com/very-long-link" required>
+            <input type="url" id="longUrl" placeholder="لینکە درێژەکە لێرە دابنێ (نموونە: https://...)" required>
+            <input type="text" id="customAlias" placeholder="ناوی دڵخواز (نموونە: j4ck721) - ئارەزوومەندانە">
         </div>
 
-        <button class="ios-btn" onclick="shortenUrl()">کورتکردنەوە</button>
+        <button class="ios-btn" id="shortenBtn">کورتکردنەوە</button>
 
         <div class="result-box" id="resultBox">
             <p style="font-size: 13px; color: #888; margin-bottom: 5px;">لینکە کورتکراوەکەت:</p>
-            <div class="short-url" id="shortUrlDisplay">jack.link/---</div>
+            <div class="short-url" id="shortUrlDisplay"></div>
             <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">کۆپیکردنی لینک</button>
         </div>
     </div>
 
-    <script>
-        function shortenUrl() {
-            const longUrlInput = document.getElementById('longUrl').value;
-            const resultBox = document.getElementById('resultBox');
-            const shortUrlDisplay = document.getElementById('shortUrlDisplay');
-            const copyBtn = document.getElementById('copyBtn');
+    <!-- بەستنەوەی فایەربەیس بە کۆدەکانی خۆتەوە -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-            // دڵنیابوونەوە لەوەی کە بۆشاییەکە بەتاڵ نییە
-            if(longUrlInput.trim() === "") {
-                alert("تکایە سەرەتا لینکێک بنووسە!");
+        // کۆدەکانی کاک جاک
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4kvPco8cMKQ4Gjrbtu3G2zqwbQbt_t_g",
+            authDomain: "url-shortener-588b9.firebaseapp.com",
+            projectId: "url-shortener-588b9",
+            storageBucket: "url-shortener-588b9.firebasestorage.app",
+            messagingSenderId: "40098380817",
+            appId: "1:40098380817:web:18e1edc1b61e1928c645b0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const shortCode = urlParams.get('c'); 
+
+        if (shortCode) {
+            document.getElementById('mainCard').style.display = 'none';
+            document.getElementById('loadingScreen').style.display = 'block';
+
+            const docRef = doc(db, "urls", shortCode);
+            getDoc(docRef).then((docSnap) => {
+                if (docSnap.exists()) {
+                    window.location.href = docSnap.data().original_url;
+                } else {
+                    document.getElementById('loadingScreen').innerHTML = "ئەم لینکە بوونی نییە! ❌";
+                }
+            }).catch((error) => {
+                document.getElementById('loadingScreen').innerHTML = "کێشەیەک هەیە لە ئینتەرنێتدا!";
+            });
+        }
+
+        document.getElementById('shortenBtn').addEventListener('click', async () => {
+            const longUrl = document.getElementById('longUrl').value;
+            let customAlias = document.getElementById('customAlias').value.trim();
+            const btn = document.getElementById('shortenBtn');
+
+            if (!longUrl) { alert("تکایە سەرەتا لینکە درێژەکە بنووسە!"); return; }
+            if (!longUrl.startsWith("http")) { alert("تکایە دڵنیابە لینکەکە بە http یان https دەستپێدەکات."); return; }
+
+            if (!customAlias) {
+                customAlias = Math.random().toString(36).substring(2, 7);
+            }
+
+            btn.innerText = "چاوەڕێ بکە...";
+            btn.disabled = true;
+
+            const docRef = doc(db, "urls", customAlias);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                alert("ئەم ناوە (" + customAlias + ") پێشتر گیراوە، تکایە ناوێکی تر هەڵبژێرە!");
+                btn.innerText = "کورتکردنەوە";
+                btn.disabled = false;
                 return;
             }
 
-            // لێرەدا کۆدێکی هەڕەمەکی بۆ لینکەکە دروست دەکەین وەکو نموونە
-            // (کاتێک داتابەیس بەکاردەهێنیت، ئەمە لە سێرڤەرەوە دێت)
-            const randomCode = Math.random().toString(36).substring(2, 7);
-            const finalShortUrl = "jack.link/" + randomCode;
+            await setDoc(docRef, { original_url: longUrl });
 
-            // نیشاندانی ئەنجامەکە
-            shortUrlDisplay.innerText = finalShortUrl;
-            resultBox.style.display = "block";
+            // لێرەدا دەبێت ناوی یوزەرنەیمی گیتھەبەکەت بنووسیت
+            const finalUrl = "https://jackkurd.github.io/?c=" + customAlias;
+            document.getElementById('shortUrlDisplay').innerText = finalUrl;
+            document.getElementById('resultBox').style.display = "block";
             
-            // گەڕاندنەوەی دوگمەی کۆپی بۆ باری ئاسایی
-            copyBtn.innerText = "کۆپیکردنی لینک";
-            copyBtn.style.color = "#007AFF";
-        }
+            btn.innerText = "کورتکردنەوە";
+            btn.disabled = false;
+        });
 
-        function copyToClipboard() {
+        window.copyToClipboard = function() {
             const shortUrlText = document.getElementById('shortUrlDisplay').innerText;
-            const copyBtn = document.getElementById('copyBtn');
-
-            // کۆپیکردنی تێکستەکە بۆ ناو مۆبایل یان کۆمپیوتەرەکەی بەکارهێنەر
             navigator.clipboard.writeText(shortUrlText).then(() => {
+                const copyBtn = document.getElementById('copyBtn');
                 copyBtn.innerText = "کۆپیکرا ✔";
-                copyBtn.style.color = "#34c759"; // ڕەنگی سەوزی ئەپڵ
-            }).catch(err => {
-                console.error('کێشەیەک هەیە لە کۆپیکردندا', err);
+                copyBtn.style.color = "#34c759";
+                setTimeout(() => { copyBtn.innerText = "کۆپیکردنی لینک"; copyBtn.style.color = "#007AFF"; }, 2000);
             });
         }
     </script>
-
 </body>
-  </html>
+</html>
